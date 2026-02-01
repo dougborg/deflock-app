@@ -7,13 +7,13 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:deflockapp/models/rf_detection.dart';
 import 'package:deflockapp/services/rf_detection_database.dart';
-import 'package:deflockapp/services/usb_scanner_service.dart';
+import 'package:deflockapp/services/scanner_service.dart';
 import 'package:deflockapp/state/scanner_state.dart';
 import '../fixtures/serial_json_fixtures.dart';
 
 /// Pump the microtask queue to let async stream handlers complete.
 /// Each `Future.delayed(Duration.zero)` yields once to the event loop;
-/// repeating ensures multi-await handlers like `_onSerialEvent` settle.
+/// repeating ensures multi-await handlers like `_onDetectionEvent` settle.
 Future<void> pumpEventQueue({int times = 20}) async {
   for (var i = 0; i < times; i++) {
     await Future<void>.delayed(Duration.zero);
@@ -23,7 +23,7 @@ Future<void> pumpEventQueue({int times = 20}) async {
 // ---------------------------------------------------------------------------
 // Mocks
 // ---------------------------------------------------------------------------
-class MockUsbScannerService extends Mock implements UsbScannerService {}
+class MockScannerService extends Mock implements ScannerService {}
 
 class MockRfDetectionDatabase extends Mock implements RfDetectionDatabase {}
 
@@ -36,7 +36,7 @@ class TestableScannerState extends ScannerState {
   Position? stubbedPosition;
 
   TestableScannerState({
-    required UsbScannerService scanner,
+    required ScannerService scanner,
     required RfDetectionDatabase db,
   }) : super(scanner: scanner, db: db);
 
@@ -64,7 +64,7 @@ Position _fakePosition({
 }
 
 void main() {
-  late MockUsbScannerService mockScanner;
+  late MockScannerService mockScanner;
   late MockRfDetectionDatabase mockDb;
   late TestableScannerState state;
   late StreamController<Map<String, dynamic>> eventController;
@@ -76,7 +76,7 @@ void main() {
   });
 
   setUp(() {
-    mockScanner = MockUsbScannerService();
+    mockScanner = MockScannerService();
     mockDb = MockRfDetectionDatabase();
     eventController = StreamController<Map<String, dynamic>>.broadcast();
     statusController = StreamController<ScannerConnectionStatus>.broadcast();
