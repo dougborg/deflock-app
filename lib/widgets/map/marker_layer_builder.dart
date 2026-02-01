@@ -12,6 +12,8 @@ import '../camera_icon.dart';
 import '../provisional_pin.dart';
 import 'node_markers.dart';
 import 'suspected_location_markers.dart';
+import '../rf_detection_markers.dart';
+import '../../models/rf_detection.dart';
 
 /// Enumeration for different pin types in navigation
 enum PinType { start, end }
@@ -58,6 +60,8 @@ class MarkerLayerBuilder {
     required LatLngBounds? mapBounds,
     required Function(OsmNode)? onNodeTap,
     required Function(SuspectedLocation)? onSuspectedLocationTap,
+    List<RfDetection>? rfDetections,
+    Function(RfDetection)? onRfDetectionTap,
   }) {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -114,6 +118,20 @@ class MarkerLayerBuilder {
           );
         }
 
+        // Build RF detection markers
+        final rfDetectionMarkers = <Marker>[];
+        if (rfDetections != null && rfDetections.isNotEmpty) {
+          rfDetectionMarkers.addAll(
+            RfDetectionMarkersBuilder.buildRfDetectionMarkers(
+              detections: rfDetections,
+              mapController: mapController.mapController,
+              onDetectionTap: onRfDetectionTap,
+              shouldDimAll: shouldDisableNodeTaps,
+              enabled: !shouldDisableNodeTaps,
+            ),
+          );
+        }
+
         // Build center marker for add/edit sessions
         final centerMarkers = _buildSessionMarkers(
           mapController: mapController,
@@ -129,8 +147,9 @@ class MarkerLayerBuilder {
 
         return MarkerLayer(
           markers: [
-            ...suspectedLocationMarkers, 
-            ...markers, 
+            ...rfDetectionMarkers,
+            ...suspectedLocationMarkers,
+            ...markers,
             ...centerMarkers,
             ...navigationMarkers,
             ...routeMarkers,
