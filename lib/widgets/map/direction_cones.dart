@@ -198,7 +198,7 @@ class DirectionConesBuilder {
 
     return Polygon(
       points: points,
-      color: kDirectionConeColor.withOpacity(opacity),
+      color: kDirectionConeColor.withValues(alpha: opacity),
       borderColor: kDirectionConeColor,
       borderStrokeWidth: getDirectionConeBorderWidth(context),
     );
@@ -246,7 +246,7 @@ class DirectionConesBuilder {
 
     return Polygon(
       points: points,
-      color: kDirectionConeColor.withOpacity(opacity),
+      color: kDirectionConeColor.withValues(alpha: opacity),
       borderColor: kDirectionConeColor,
       borderStrokeWidth: getDirectionConeBorderWidth(context),
     );
