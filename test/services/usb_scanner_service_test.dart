@@ -262,6 +262,31 @@ void main() {
     test('lastError is null', () {
       expect(service.lastError, isNull);
     });
+
+    test('heartbeat is not active', () {
+      expect(service.isHeartbeatActive, isFalse);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Heartbeat lifecycle
+  // ---------------------------------------------------------------------------
+  group('Heartbeat lifecycle', () {
+    test('heartbeat is not active before connect', () {
+      expect(service.isHeartbeatActive, isFalse);
+    });
+
+    test('heartbeat is stopped after dispose', () async {
+      final localService = UsbScannerService();
+      await localService.dispose();
+      expect(localService.isHeartbeatActive, isFalse);
+    });
+
+    test('heartbeat is stopped after disconnect', () async {
+      // disconnect() on a never-connected service should be safe
+      await service.disconnect();
+      expect(service.isHeartbeatActive, isFalse);
+    });
   });
 
   // ---------------------------------------------------------------------------

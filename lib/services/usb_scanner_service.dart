@@ -17,6 +17,10 @@ class UsbScannerService with JsonLineParser implements ScannerService {
   UsbPort? _port;
   StreamSubscription<Uint8List>? _portSubscription;
   StreamSubscription<UsbEvent>? _hotplugSubscription;
+  Timer? _heartbeatTimer;
+
+  /// Single newline byte sent as heartbeat — allocated once.
+  static final _heartbeatByte = Uint8List.fromList([0x0A]);
 
   final _eventController = StreamController<Map<String, dynamic>>.broadcast();
   final _statusController =
@@ -123,6 +127,16 @@ class UsbScannerService with JsonLineParser implements ScannerService {
         },
       );
 
+      // Start heartbeat so ESP32 can detect active serial vs wall charger
+      _heartbeatTimer?.cancel();
+      _heartbeatTimer = Timer.periodic(const Duration(seconds: 2), (_) {
+        try {
+          _port?.write(_heartbeatByte);
+        } catch (e) {
+          debugPrint('[UsbScanner] Heartbeat write failed: $e');
+        }
+      });
+
       _setStatus(ScannerConnectionStatus.connected);
       debugPrint('[UsbScanner] Connected successfully');
       return true;
@@ -135,6 +149,9 @@ class UsbScannerService with JsonLineParser implements ScannerService {
   /// Disconnect from the USB device.
   @override
   Future<void> disconnect() async {
+    _heartbeatTimer?.cancel();
+    _heartbeatTimer = null;
+
     await _portSubscription?.cancel();
     _portSubscription = null;
 
@@ -155,6 +172,9 @@ class UsbScannerService with JsonLineParser implements ScannerService {
   /// Handle unexpected disconnection (USB detach, stream error).
   /// Closes port if still open, then updates status.
   void _handleDisconnect() {
+    _heartbeatTimer?.cancel();
+    _heartbeatTimer = null;
+
     _portSubscription?.cancel();
     _portSubscription = null;
 
@@ -197,4 +217,8 @@ class UsbScannerService with JsonLineParser implements ScannerService {
   /// Feed raw bytes into the serial parser for testing.
   @visibleForTesting
   void processSerialDataForTesting(Uint8List data) => processBytes(data);
+
+  /// Whether the heartbeat timer is currently active (for testing).
+  @visibleForTesting
+  bool get isHeartbeatActive => _heartbeatTimer?.isActive ?? false;
 }
