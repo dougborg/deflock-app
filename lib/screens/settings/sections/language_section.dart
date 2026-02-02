@@ -67,7 +67,7 @@ class _LanguageSectionState extends State<LanguageSection> {
               ),
               // English always appears second (if available)
               if (locService.availableLanguages.contains('en'))
-                RadioListTile<String>(
+                RadioListTile<String?>(
                   title: Text(_languageNames['en'] ?? 'English'),
                   value: 'en',
                 ),
@@ -75,7 +75,7 @@ class _LanguageSectionState extends State<LanguageSection> {
               ...locService.availableLanguages
                   .where((langCode) => langCode != 'en')
                   .map((langCode) =>
-                RadioListTile<String>(
+                RadioListTile<String?>(
                   title: Text(_languageNames[langCode] ?? langCode.toUpperCase()),
                   value: langCode,
                 ),
