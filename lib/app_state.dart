@@ -23,7 +23,6 @@ import 'services/operator_profile_service.dart';
 import 'services/deep_link_service.dart';
 import 'widgets/node_provider_with_cache.dart';
 import 'services/profile_service.dart';
-import 'widgets/proximity_warning_dialog.dart';
 import 'widgets/reauth_messages_dialog.dart';
 import 'dev_config.dart';
 import 'state/auth_state.dart';

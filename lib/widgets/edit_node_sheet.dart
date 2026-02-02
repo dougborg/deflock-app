@@ -7,12 +7,10 @@ import 'package:flutter_map/flutter_map.dart';
 import '../app_state.dart';
 import '../dev_config.dart';
 import '../models/node_profile.dart';
-import '../models/operator_profile.dart';
 import '../services/localization_service.dart';
 import '../services/map_data_provider.dart';
 import '../services/node_data_manager.dart';
 import '../services/changelog_service.dart';
-import '../state/settings_state.dart';
 import 'refine_tags_sheet.dart';
 import 'advanced_edit_options_sheet.dart';
 import 'proximity_warning_dialog.dart';
@@ -300,8 +298,6 @@ class _EditNodeSheetState extends State<EditNodeSheet> {
 
         final session = widget.session;
         final submittableProfiles = appState.enabledProfiles.where((p) => p.isSubmittable).toList();
-        final isSandboxMode = appState.uploadMode == UploadMode.sandbox;
-        
         // Check if we have good cache coverage around the node position
         bool hasGoodCoverage = true;
         final nodeCoord = session.originalNode.coord;

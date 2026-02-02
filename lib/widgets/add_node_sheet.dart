@@ -7,7 +7,6 @@ import 'package:flutter_map/flutter_map.dart';
 import '../app_state.dart';
 import '../dev_config.dart';
 import '../models/node_profile.dart';
-import '../models/operator_profile.dart';
 import '../services/localization_service.dart';
 import '../services/map_data_provider.dart';
 import '../services/node_data_manager.dart';
@@ -55,23 +54,6 @@ class _AddNodeSheetState extends State<AddNodeSheet> {
       if (_showTutorial) {
         final appState = context.read<AppState>();
         appState.registerTutorialCallback(_hideTutorial);
-      }
-    }
-  }
-
-  /// Listen for tutorial completion from AppState
-  void _onTutorialCompleted() {
-    _hideTutorial();
-  }
-
-  /// Also check periodically if tutorial was completed by another sheet
-  void _recheckTutorialStatus() async {
-    if (_showTutorial) {
-      final hasCompleted = await ChangelogService().hasCompletedPositioningTutorial();
-      if (hasCompleted && mounted) {
-        setState(() {
-          _showTutorial = false;
-        });
       }
     }
   }

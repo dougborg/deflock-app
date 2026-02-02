@@ -6,7 +6,6 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import '../app_state.dart';
-import '../models/tile_provider.dart' as models;
 import 'map_data_provider.dart';
 import 'offline_area_service.dart';
 
