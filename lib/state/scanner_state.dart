@@ -100,10 +100,9 @@ class ScannerState extends ChangeNotifier {
 
     // On Android, also start USB scanner to listen for hotplug events.
     // When USB connects, we auto-switch transport.
-    if (_usbScanner != null) {
-      await _usbScanner!.init();
-      _usbStatusSubscription =
-          _usbScanner!.statusStream.listen(_onUsbStatusChange);
+    if (_usbScanner case final usb?) {
+      await usb.init();
+      _usbStatusSubscription = usb.statusStream.listen(_onUsbStatusChange);
     }
 
     notifyListeners();

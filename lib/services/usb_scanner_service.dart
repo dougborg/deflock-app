@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:usb_serial/usb_serial.dart';
 
@@ -183,8 +181,9 @@ class UsbScannerService with JsonLineParser implements ScannerService {
     final port = _port;
     _port = null;
     if (port != null) {
-      port.close().catchError((e) {
+      port.close().catchError((Object e) {
         debugPrint('[UsbScanner] Error closing port during disconnect: $e');
+        return false;
       });
     }
 

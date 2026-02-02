@@ -181,7 +181,7 @@ class _ConnectionBanner extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      color: bgColor.withOpacity(0.15),
+      color: bgColor.withValues(alpha: 0.15),
       child: Row(
         children: [
           Icon(
@@ -393,7 +393,7 @@ class _StatChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
@@ -427,17 +427,17 @@ class _FilterChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
-          color: selected ? chipColor.withOpacity(0.2) : Colors.transparent,
+          color: selected ? chipColor.withValues(alpha: 0.2) : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: selected ? chipColor : theme.colorScheme.outline.withOpacity(0.3),
+            color: selected ? chipColor : theme.colorScheme.outline.withValues(alpha: 0.3),
           ),
         ),
         child: Text(
           label,
           style: TextStyle(
             fontSize: 11,
-            color: selected ? chipColor : theme.colorScheme.onSurface.withOpacity(0.6),
+            color: selected ? chipColor : theme.colorScheme.onSurface.withValues(alpha: 0.6),
             fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
