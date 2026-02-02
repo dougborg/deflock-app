@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import '../app_state.dart';
 
 enum NetworkIssueType { overpassApi }
 enum NetworkStatusType { waiting, issues, timedOut, noData, ready, success }

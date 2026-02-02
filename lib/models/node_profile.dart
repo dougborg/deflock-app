@@ -1,5 +1,3 @@
-import 'package:uuid/uuid.dart';
-
 /// Sentinel value for copyWith methods to distinguish between null and not provided
 const Object _notProvided = Object();
 

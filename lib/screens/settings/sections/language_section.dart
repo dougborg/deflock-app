@@ -20,14 +20,14 @@ class _LanguageSectionState extends State<LanguageSection> {
     _loadLanguageNames();
   }
 
-  _loadSelectedLanguage() async {
+  Future<void> _loadSelectedLanguage() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _selectedLanguage = prefs.getString('language_code');
     });
   }
 
-  _loadLanguageNames() async {
+  Future<void> _loadLanguageNames() async {
     final locService = LocalizationService.instance;
     final Map<String, String> names = {};
     
@@ -40,7 +40,7 @@ class _LanguageSectionState extends State<LanguageSection> {
     });
   }
 
-  _setLanguage(String? languageCode) async {
+  Future<void> _setLanguage(String? languageCode) async {
     await LocalizationService.instance.setLanguage(languageCode);
     setState(() {
       _selectedLanguage = languageCode;

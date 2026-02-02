@@ -1,5 +1,3 @@
-import 'package:uuid/uuid.dart';
-
 /// A bundle of OSM tags that describe a particular surveillance operator.
 /// These are applied on top of camera profile tags during submissions.
 class OperatorProfile {
