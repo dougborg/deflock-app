@@ -349,12 +349,6 @@ class Uploader {
         headers: _headers,
       ).timeout(kUploadHttpTimeout);
 
-  Future<http.Response> _post(String path, String body) => http.post(
-        Uri.https(_host, path),
-        headers: _headers,
-        body: body,
-      ).timeout(kUploadHttpTimeout);
-
   Future<http.Response> _put(String path, String body) => http.put(
         Uri.https(_host, path),
         headers: _headers,
