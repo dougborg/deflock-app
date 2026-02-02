@@ -377,6 +377,7 @@ class AppState extends ChangeNotifier {
   /// Show re-authentication dialog if needed
   Future<void> checkAndPromptReauthForMessages(BuildContext context) async {
     if (await needsReauthForMessages()) {
+      if (!context.mounted) return;
       _showReauthDialog(context);
     }
   }
