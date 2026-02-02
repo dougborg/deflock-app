@@ -35,14 +35,14 @@ import 'state/settings_state.dart';
 import 'state/suspected_location_state.dart';
 import 'state/upload_queue_state.dart';
 import 'state/scanner_state.dart';
-import 'services/usb_scanner_service.dart' show ScannerConnectionStatus;
+import 'services/scanner_service.dart' show ScannerConnectionStatus, ScannerTransportType;
 
 // Re-export types
 export 'state/navigation_state.dart' show AppNavigationMode;
 export 'state/settings_state.dart' show UploadMode, FollowMeMode;
 export 'state/session_state.dart' show AddNodeSession, EditNodeSession;
 export 'state/scanner_state.dart' show ScannerState;
-export 'services/usb_scanner_service.dart' show ScannerConnectionStatus;
+export 'services/scanner_service.dart' show ScannerConnectionStatus, ScannerTransportType;
 
 // ------------------ AppState ------------------
 class AppState extends ChangeNotifier {
@@ -194,6 +194,7 @@ class AppState extends ChangeNotifier {
   ScannerConnectionStatus get scannerConnectionStatus => _scannerState.connectionStatus;
   bool get isScannerConnected => _scannerState.isConnected;
   int get scannerDetectionCount => _scannerState.detectionCount;
+  ScannerTransportType get scannerTransportType => _scannerState.activeTransportType;
   ScannerState get scannerState => _scannerState;
 
   void _onStateChanged() {
