@@ -97,7 +97,7 @@ Future<List<OsmNode>> _fetchFromOsmApi({
     debugPrint('[fetchOsmApiNodes] Exception: $e');
     
     // Don't report status here - let the top level handle it
-    throw e; // Re-throw to let caller handle
+    rethrow; // Re-throw to let caller handle
   }
 }
 

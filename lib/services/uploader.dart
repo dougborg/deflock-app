@@ -146,7 +146,7 @@ class Uploader {
           final currentNodeXml = currentNodeResp.body;
           final versionMatch = RegExp(r'version="(\d+)"').firstMatch(currentNodeXml);
           if (versionMatch == null) {
-            final errorMsg = 'Could not parse version from node XML: ${currentNodeXml.length > 200 ? currentNodeXml.substring(0, 200) + "..." : currentNodeXml}';
+            final errorMsg = 'Could not parse version from node XML: ${currentNodeXml.length > 200 ? '${currentNodeXml.substring(0, 200)}...' : currentNodeXml}';
             debugPrint('[Uploader] $errorMsg');
             return UploadResult.failure(errorMessage: errorMsg, changesetId: changesetId);
           }
@@ -183,7 +183,7 @@ class Uploader {
           final currentNodeXml = currentNodeResp.body;
           final versionMatch = RegExp(r'version="(\d+)"').firstMatch(currentNodeXml);
           if (versionMatch == null) {
-            final errorMsg = 'Could not parse version from node XML for deletion: ${currentNodeXml.length > 200 ? currentNodeXml.substring(0, 200) + "..." : currentNodeXml}';
+            final errorMsg = 'Could not parse version from node XML for deletion: ${currentNodeXml.length > 200 ? '${currentNodeXml.substring(0, 200)}...' : currentNodeXml}';
             debugPrint('[Uploader] $errorMsg');
             return UploadResult.failure(errorMessage: errorMsg, changesetId: changesetId);
           }

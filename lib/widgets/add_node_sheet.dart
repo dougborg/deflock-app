@@ -384,11 +384,11 @@ class _AddNodeSheetState extends State<AddNodeSheet> {
         final locService = LocalizationService.instance;
         final appState = context.watch<AppState>();
 
-        void _commit() {
+        void commit() {
           _checkProximityAndCommit(context, appState, locService);
         }
 
-        void _cancel() {
+        void cancel() {
           appState.cancelSession();
           Navigator.pop(context);
         }
@@ -424,11 +424,11 @@ class _AddNodeSheetState extends State<AddNodeSheet> {
             session.profile!.isSubmittable &&
             hasGoodCoverage;
         
-        void _navigateToLogin() {
+        void navigateToLogin() {
           Navigator.pushNamed(context, '/settings/osm-account');
         }
-        
-        void _openRefineTags() async {
+
+        void openRefineTags() async {
           final result = await Navigator.push<RefineTagsResult?>(
             context,
             MaterialPageRoute(
@@ -558,7 +558,7 @@ class _AddNodeSheetState extends State<AddNodeSheet> {
                 child: SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
-                    onPressed: session.profile != null ? _openRefineTags : null, // Disabled when no profile selected
+                    onPressed: session.profile != null ? openRefineTags : null, // Disabled when no profile selected
                     icon: const Icon(Icons.tune),
                     label: Text(session.operatorProfile != null
                         ? locService.t('addNode.refineTagsWithProfile', params: [session.operatorProfile!.name])
@@ -573,14 +573,14 @@ class _AddNodeSheetState extends State<AddNodeSheet> {
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: _cancel,
+                        onPressed: cancel,
                         child: Text(locService.cancel),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: !appState.isLoggedIn ? _navigateToLogin : (allowSubmit ? _commit : null),
+                        onPressed: !appState.isLoggedIn ? navigateToLogin : (allowSubmit ? commit : null),
                         child: Text(!appState.isLoggedIn ? locService.t('actions.logIn') : locService.t('actions.submit')),
                       ),
                     ),
