@@ -2,24 +2,25 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 const String localizationsDir = 'lib/localizations';
 const String referenceFile = 'en.json';
 
 void main() async {
-  print('🌍 Validating localization files...\n');
+  debugPrint('🌍 Validating localization files...\n');
   
   try {
     final result = await validateLocalizations();
     if (result) {
-      print('✅ All localization files are valid!');
+      debugPrint('✅ All localization files are valid!');
       exit(0);
     } else {
-      print('❌ Localization validation failed!');
+      debugPrint('❌ Localization validation failed!');
       exit(1);
     }
   } catch (e) {
-    print('💥 Error during validation: $e');
+    debugPrint('💥 Error during validation: $e');
     exit(1);
   }
 }
@@ -28,7 +29,7 @@ Future<bool> validateLocalizations() async {
   // Get all JSON files in localizations directory
   final locDir = Directory(localizationsDir);
   if (!locDir.existsSync()) {
-    print('❌ Localizations directory not found: $localizationsDir');
+    debugPrint('❌ Localizations directory not found: $localizationsDir');
     return false;
   }
   
@@ -39,20 +40,20 @@ Future<bool> validateLocalizations() async {
       .toList();
   
   if (jsonFiles.isEmpty) {
-    print('❌ No JSON localization files found');
+    debugPrint('❌ No JSON localization files found');
     return false;
   }
   
-  print('📁 Found ${jsonFiles.length} localization files:');
+  debugPrint('📁 Found ${jsonFiles.length} localization files:');
   for (final file in jsonFiles) {
-    print('   • $file');
+    debugPrint('   • $file');
   }
-  print('');
+  debugPrint('');
   
   // Load reference file (English)
   final refFile = File('$localizationsDir/$referenceFile');
   if (!refFile.existsSync()) {
-    print('❌ Reference file not found: $referenceFile');
+    debugPrint('❌ Reference file not found: $referenceFile');
     return false;
   }
   
@@ -61,12 +62,12 @@ Future<bool> validateLocalizations() async {
     final refContent = await refFile.readAsString();
     referenceData = json.decode(refContent) as Map<String, dynamic>;
   } catch (e) {
-    print('❌ Failed to parse reference file $referenceFile: $e');
+    debugPrint('❌ Failed to parse reference file $referenceFile: $e');
     return false;
   }
   
   final referenceKeys = _extractAllKeys(referenceData);
-  print('🔑 Reference file ($referenceFile) has ${referenceKeys.length} keys');
+  debugPrint('🔑 Reference file ($referenceFile) has ${referenceKeys.length} keys');
   
   bool allValid = true;
   
@@ -74,7 +75,7 @@ Future<bool> validateLocalizations() async {
   for (final fileName in jsonFiles) {
     if (fileName == referenceFile) continue; // Skip reference file
     
-    print('\n🔍 Validating $fileName...');
+    debugPrint('\n🔍 Validating $fileName...');
     
     final file = File('$localizationsDir/$fileName');
     Map<String, dynamic> fileData;
@@ -83,7 +84,7 @@ Future<bool> validateLocalizations() async {
       final content = await file.readAsString();
       fileData = json.decode(content) as Map<String, dynamic>;
     } catch (e) {
-      print('   ❌ Failed to parse $fileName: $e');
+      debugPrint('   ❌ Failed to parse $fileName: $e');
       allValid = false;
       continue;
     }
@@ -92,11 +93,11 @@ Future<bool> validateLocalizations() async {
     final validation = _validateKeys(referenceKeys, fileKeys, fileName);
     
     if (validation.isValid) {
-      print('   ✅ Structure matches reference (${fileKeys.length} keys)');
+      debugPrint('   ✅ Structure matches reference (${fileKeys.length} keys)');
     } else {
-      print('   ❌ Structure validation failed:');
+      debugPrint('   ❌ Structure validation failed:');
       for (final error in validation.errors) {
-        print('      • $error');
+        debugPrint('      • $error');
       }
       allValid = false;
     }
