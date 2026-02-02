@@ -113,23 +113,23 @@ class _RefineTagsSheetState extends State<RefineTagsSheet> {
             )
           else ...[
             Card(
-              child: Column(
-                children: [
-                  RadioListTile<OperatorProfile?>(
-                    title: Text(locService.t('refineTagsSheet.none')),
-                    subtitle: Text(locService.t('refineTagsSheet.noAdditionalOperatorTags')),
-                    value: null,
-                    groupValue: _selectedOperatorProfile,
-                    onChanged: (value) => setState(() => _selectedOperatorProfile = value),
-                  ),
-                  ...operatorProfiles.map((profile) => RadioListTile<OperatorProfile?>(
-                    title: Text(profile.name),
-                    subtitle: Text('${profile.tags.length} ${locService.t('refineTagsSheet.additionalTags')}'),
-                    value: profile,
-                    groupValue: _selectedOperatorProfile,
-                    onChanged: (value) => setState(() => _selectedOperatorProfile = value),
-                  )),
-                ],
+              child: RadioGroup<OperatorProfile?>(
+                groupValue: _selectedOperatorProfile,
+                onChanged: (value) => setState(() => _selectedOperatorProfile = value),
+                child: Column(
+                  children: [
+                    RadioListTile<OperatorProfile?>(
+                      title: Text(locService.t('refineTagsSheet.none')),
+                      subtitle: Text(locService.t('refineTagsSheet.noAdditionalOperatorTags')),
+                      value: null,
+                    ),
+                    ...operatorProfiles.map((profile) => RadioListTile<OperatorProfile?>(
+                      title: Text(profile.name),
+                      subtitle: Text('${profile.tags.length} ${locService.t('refineTagsSheet.additionalTags')}'),
+                      value: profile,
+                    )),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 16),

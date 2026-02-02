@@ -54,36 +54,34 @@ class _LanguageSectionState extends State<LanguageSection> {
       builder: (context, child) {
         final locService = LocalizationService.instance;
         
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // System Default option
-            RadioListTile<String?>(
-              title: Text(locService.t('settings.systemDefault')),
-              value: null,
-              groupValue: _selectedLanguage,
-              onChanged: _setLanguage,
-            ),
-            // English always appears second (if available)
-            if (locService.availableLanguages.contains('en'))
-              RadioListTile<String>(
-                title: Text(_languageNames['en'] ?? 'English'),
-                value: 'en',
-                groupValue: _selectedLanguage,
-                onChanged: _setLanguage,
+        return RadioGroup<String?>(
+          groupValue: _selectedLanguage,
+          onChanged: _setLanguage,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // System Default option
+              RadioListTile<String?>(
+                title: Text(locService.t('settings.systemDefault')),
+                value: null,
               ),
-            // Other language options (excluding English since it's already shown)
-            ...locService.availableLanguages
-                .where((langCode) => langCode != 'en')
-                .map((langCode) => 
-              RadioListTile<String>(
-                title: Text(_languageNames[langCode] ?? langCode.toUpperCase()),
-                value: langCode,
-                groupValue: _selectedLanguage,
-                onChanged: _setLanguage,
+              // English always appears second (if available)
+              if (locService.availableLanguages.contains('en'))
+                RadioListTile<String?>(
+                  title: Text(_languageNames['en'] ?? 'English'),
+                  value: 'en',
+                ),
+              // Other language options (excluding English since it's already shown)
+              ...locService.availableLanguages
+                  .where((langCode) => langCode != 'en')
+                  .map((langCode) =>
+                RadioListTile<String?>(
+                  title: Text(_languageNames[langCode] ?? langCode.toUpperCase()),
+                  value: langCode,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
