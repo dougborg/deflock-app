@@ -349,6 +349,29 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
+  // Transport type
+  // ---------------------------------------------------------------------------
+  group('Transport type', () {
+    test('defaults to BLE when using single-scanner constructor', () {
+      // TestableScannerState is constructed with scanner: param which means
+      // _usbScanner is null — activeTransportType should always be BLE.
+      expect(state.activeTransportType, ScannerTransportType.ble);
+    });
+
+    test('remains BLE after init', () async {
+      await initState();
+      expect(state.activeTransportType, ScannerTransportType.ble);
+    });
+
+    test('remains BLE after status changes', () async {
+      await initState();
+      statusController.add(ScannerConnectionStatus.connected);
+      await pumpEventQueue();
+      expect(state.activeTransportType, ScannerTransportType.ble);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
   // DB passthrough
   // ---------------------------------------------------------------------------
   group('DB passthrough', () {

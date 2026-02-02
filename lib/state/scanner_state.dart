@@ -77,6 +77,12 @@ class ScannerState extends ChangeNotifier {
   bool get isConnected => _activeScanner.isConnected;
   String? get lastError => _activeScanner.lastError;
 
+  /// Which transport is currently active (BLE or USB).
+  ScannerTransportType get activeTransportType =>
+      _activeScanner == _usbScanner
+          ? ScannerTransportType.usb
+          : ScannerTransportType.ble;
+
   /// Initialize scanner: open database, start BLE transport, and optionally
   /// start USB monitoring on Android.
   Future<void> init() async {

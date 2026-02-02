@@ -1,5 +1,8 @@
 import 'dart:async';
 
+/// Which transport layer is currently active.
+enum ScannerTransportType { ble, usb }
+
 /// Connection status for a scanner transport (USB, BLE, etc.).
 enum ScannerConnectionStatus {
   disconnected,
