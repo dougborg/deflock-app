@@ -16,6 +16,9 @@ class TestParser with JsonLineParser {
   void onJsonEvent(Map<String, dynamic> json) {
     events.add(json);
   }
+
+  /// Expose protected method for testing.
+  void reset() => resetLineBuffer();
 }
 
 void main() {
@@ -176,7 +179,7 @@ void main() {
       parser.processBytes(_encode('partial'));
       expect(parser.lineBufferForTesting, 'partial');
 
-      parser.resetLineBuffer();
+      parser.reset();
       expect(parser.lineBufferForTesting, isEmpty);
     });
   });
