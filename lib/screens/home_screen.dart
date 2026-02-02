@@ -357,10 +357,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
     
     // Reset height and clear selection when sheet is dismissed
-    final appStateForClose = context.read<AppState>();
+    final appState = context.read<AppState>();
     controller.closed.then((_) {
       _sheetCoordinator.resetTagSheetHeight(() => setState(() {}));
-      appStateForClose.clearSuspectedLocationSelection();
+      appState.clearSuspectedLocationSelection();
     });
   }
 
