@@ -2,7 +2,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:async';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import '../app_state.dart';
@@ -107,7 +106,7 @@ class DeflockTileImageProvider extends ImageProvider<DeflockTileImageProvider> {
       
       // Re-throw the exception and let FlutterMap handle missing tiles gracefully
       // This is better than trying to provide fallback images
-      throw e;
+      rethrow;
     }
   }
   
