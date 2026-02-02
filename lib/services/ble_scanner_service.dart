@@ -109,20 +109,23 @@ class BleScannerService with JsonLineParser implements ScannerService {
 
       debugPrint('[BleScanner] Found device: ${_device!.remoteId}');
 
-      // Listen for disconnections before connecting
-      _connectionSubscription?.cancel();
-      _connectionSubscription = _device!.connectionState.listen((state) {
-        if (state == BluetoothConnectionState.disconnected) {
-          debugPrint('[BleScanner] Device disconnected');
-          _handleDisconnect();
-        }
-      });
-
       // Connect
       await _device!.connect(
         autoConnect: false,
         timeout: const Duration(seconds: 10),
       );
+
+      // Listen for disconnections *after* the link is established.
+      // Subscribing before connect() causes flutter_blue_plus to emit the
+      // current state (disconnected) immediately, which races with connect().
+      _connectionSubscription?.cancel();
+      _connectionSubscription = _device!.connectionState.listen((state) {
+        if (state == BluetoothConnectionState.disconnected &&
+            _status == ScannerConnectionStatus.connected) {
+          debugPrint('[BleScanner] Device disconnected');
+          _handleDisconnect();
+        }
+      });
 
       // Request larger MTU (iOS negotiates automatically; explicit on Android)
       await _device!.requestMtu(512);
