@@ -261,31 +261,39 @@ class NodeDataManager extends ChangeNotifier {
     }
   }
 
-  /// Fetch data by splitting area into quadrants
+  /// Fetch data by splitting area into quadrants.
+  /// Notifies listeners after each quadrant completes so cameras appear
+  /// on the map progressively instead of waiting for all quadrants to finish.
   Future<List<OsmNode>> _fetchSplitAreas(
-    LatLngBounds bounds, 
+    LatLngBounds bounds,
     List<NodeProfile> profiles,
     int splitDepth, {
     bool isUserInitiated = false,
   }) async {
     final quadrants = _splitBounds(bounds);
     final allNodes = <OsmNode>[];
-    
+
     for (final quadrant in quadrants) {
       try {
         final nodes = await fetchWithSplitting(
-          quadrant, 
-          profiles, 
-          splitDepth: splitDepth, 
+          quadrant,
+          profiles,
+          splitDepth: splitDepth,
           isUserInitiated: isUserInitiated,
         );
         allNodes.addAll(nodes);
+
+        // Progressive rendering: notify the UI after each quadrant so cameras
+        // appear on the map as each sub-area completes its fetch.
+        if (nodes.isNotEmpty) {
+          notifyListeners();
+        }
       } catch (e) {
         debugPrint('[NodeDataManager] Quadrant fetch failed: $e');
         // Continue with other quadrants
       }
     }
-    
+
     debugPrint('[NodeDataManager] Split fetch complete: ${allNodes.length} total nodes');
     return allNodes;
   }

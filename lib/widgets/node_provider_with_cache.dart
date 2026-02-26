@@ -13,9 +13,20 @@ import '../app_state.dart';
 class NodeProviderWithCache extends ChangeNotifier {
   static final NodeProviderWithCache instance = NodeProviderWithCache._internal();
   factory NodeProviderWithCache() => instance;
-  NodeProviderWithCache._internal();
+  NodeProviderWithCache._internal() {
+    // Listen to NodeDataManager for progressive updates during area splitting.
+    // When splitting fetches quadrants sequentially, each quadrant's results
+    // are cached immediately — this listener forwards those updates to the UI
+    // so cameras appear on the map incrementally instead of all at once.
+    _nodeDataManager.addListener(_onDataManagerUpdate);
+  }
 
   final NodeDataManager _nodeDataManager = NodeDataManager();
+
+  void _onDataManagerUpdate() {
+    notifyListeners();
+  }
+
   Timer? _debounceTimer;
 
   /// Get cached nodes for the given bounds, filtered by enabled profiles
