@@ -1,0 +1,44 @@
+# Manual-trigger workflow to run Gatling load tests against overpass.deflock.org.
+#
+# Trigger from the Actions tab → "Load Test" → "Run workflow".
+# The HTML report is uploaded as a downloadable artifact (retained 30 days).
+#
+# Only one load test can run at a time (concurrency group prevents overlapping
+# runs from skewing results or overwhelming the Overpass instance).
+
+name: Load Test
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: load-test
+  cancel-in-progress: true
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      # Caches Gradle wrapper and dependencies between runs
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run Gatling load test
+        working-directory: load-tests
+        run: ./gradlew gatlingRun
+
+      - name: Upload Gatling report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gatling-report
+          path: load-tests/build/reports/gatling/
+          retention-days: 30
